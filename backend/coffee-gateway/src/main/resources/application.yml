@@ -1,0 +1,34 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: coffee-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: product-service
+          uri: lb://coffee-product-service
+          predicates:
+            - Path=/api/products/**
+        - id: coupon-service
+          uri: lb://coffee-coupon-service
+          predicates:
+            - Path=/api/coupons/**
+        - id: seckill-service
+          uri: lb://coffee-seckill-service
+          predicates:
+            - Path=/api/seckill/**
+        - id: order-service
+          uri: lb://coffee-order-service
+          predicates:
+            - Path=/api/orders/**
+        - id: stat-service
+          uri: lb://coffee-stat-service
+          predicates:
+            - Path=/api/stats/**
