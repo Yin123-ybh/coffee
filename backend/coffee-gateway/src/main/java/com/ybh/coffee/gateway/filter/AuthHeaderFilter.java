@@ -12,10 +12,8 @@ import reactor.core.publisher.Mono;
 public class AuthHeaderFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        String userId = exchange.getRequest().getHeaders().getFirst("X-User-Id");
-        if (userId == null || userId.isBlank()) {
-            userId = "1";
-        }
+        String headerUserId = exchange.getRequest().getHeaders().getFirst("X-User-Id");
+        String userId = headerUserId == null || headerUserId.isBlank() ? "1" : headerUserId;
         ServerWebExchange mutated = exchange.mutate()
                 .request(builder -> builder.header("X-User-Id", userId).header(HttpHeaders.CACHE_CONTROL, "no-store"))
                 .build();
